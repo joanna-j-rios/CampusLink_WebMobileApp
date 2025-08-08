@@ -8,31 +8,50 @@ Project Description
 CampusLink is a web application designed to serve as a centralized hub for university students. The application aims to simplify a student’s academic and social life by providing a single, portable platform to manage schedules, discover events, stay informed through a community bulletin board, and access critical emergency contacts, accessible from any device, anywhere.
 
 Key Features
+
+	User Authentication & Account Management: A secure system to create unique accounts, log in, and log out and a space for displaying user information and managing sessions
+
 	Activities & Task Schedule Manager: A user friendly interface to add, view, and edit a weekly schedule of classes, appointments, and personal tasks optimized for touch interaction and mobile screens.
-	Event Calendar: An interactive calendar to view and subscribe to various campus events. Categorized by interest such as academic, sports, clubs, and more, with responsive display across devices.
-	Bulletin Board: A dedicated section for Browse and posting announcements relevant to the campus community, including news, queries, and student led activities/initiatives, designed for easy readability and posting on the go.
-	Emergency Contacts: A quick access panel with one click buttons to contact essential campus services like security, health, and counseling.
+	
+ 	Event Calendar: An interactive calendar to view and subscribe to various campus events. Categorized by interest such as academic, sports, clubs, and more, with responsive display across devices.
+	
+ 	Bulletin Board: A dedicated section for Browse and posting announcements relevant to the campus community, including news, queries, and student led activities/initiatives, designed for easy readability and posting on the go.
+	
+ 	Emergency Contacts: A quick access panel with one click buttons to contact essential campus services like security, health, and counseling.
+
 
 Development Methodology
+
 This project is being developed using an agile methodology with an emphasis on iterative development, continuous feedback, testing, and collaboration through version control.
 
+
 Basic Usage Instructions
+
 To get a local copy of this project up and running on your machine, follow these simple steps.
 
 Prerequisites 
+
 	Python 3.x installed on your system
 	git command line tool
 
 Installation 
+
 	For collaborators: Clone this repository directly.
 	For public users: First, fork this repository to your own Github account, then clone your fork.
-		git clone [repository-URL]
+		
+  		git clone [repository-URL]
+	
 	Navigate to the project directory:
+ 
 		cd [repository-name]
-	Create and activate a virtual environment to manage project dependencies
+	
+ 	Create and activate a virtual environment to manage project dependencies
+  
 		python -m venv virt
 		Source virt/bin/activate
+  
 	Run the application
+ 
 		python main.py
 
 
@@ -40,13 +59,18 @@ Agile Planning
 
 Team members and Roles
 
-	Joanna Rios - Technical Lead & System Architect:
+	Joanna Rios - Technical Lead & System Architect
+ 
 	Responsibilities: Drives the technical vision, sets up the Git/GitHub repository and development environment, designs the overall software architecture, creates UML diagrams, and ensures code quality. The “swiss army knife” responsible for the technical documentation and ensuring deadlines are met.
-	
-	Alicia Cortina - UI/UX Specialist/Prototyper & Feature Developer:
+
+ 
+	Alicia Cortina - UI/UX Specialist/Prototyper & Feature Developer
+ 
 	Responsibilities: Focuses on the user interface design ( layouts, widgets, user flow), implements specific features like the "Activities/Task Schedule Manager" and "Bulletin Board," ensuring a good user experience.
-	
-	Emma Pacheco - Backend Logic & Data Specialist / Tester:
+
+ 
+	Emma Pacheco - Backend Logic & Data Specialist / Tester
+ 
 	Responsibilities: Develops the underlying logic for features (e.g., notification systems, data handling for events/schedules), manages data storage, sets up and runs testing procedures, and might focus on aspects like the "Event Calendar" data integration or "Emergency Contacts" logic.
 
 
@@ -67,8 +91,9 @@ Sprint Schedule
 			Core UI Setup: Setup basic structure for interactivity.
 			Responsive Layout: Setup layout that responds to mobile/web views.
 			Navigation: Setup the primary navigation structure to switch between sections.
-			Placeholder Sections: Create empty frames/sections/pages for each of the four main features (Activities, Events, Bulletin Board, Emergency Contacts).
-			Initial Wireframes: Finalize basic UI wireframes for the overall app layout.
+   			Log In/ Create Account: Get the login and account creation flow running.
+			Placeholder Sections: Create empty frames/sections/pages for each of the main features (Activities, Events, Bulletin Board, Emergency Contacts, Account Info. with logout).
+			Initial Wireframes: Finalize basic UI wireframes & prototypes for the overall app layout.
 
 	Sprint 3
 		Start Date: August 12
@@ -82,6 +107,30 @@ Sprint Schedule
 
 User Stories
 
+
+	0	User Authentication & Account Management
+	
+	As a student, I want a secure and personalized experience, so I must first create an account and log in to access my personal data and the app’s features
+
+ 
+	0.1	Create an Account
+	
+	As a new student, I want to create an account by providing a unique username and password, so that I can securely access the CampusLink application for the first time.
+
+ 
+	0.2	Log In to Account
+
+	As a student, I want to log in to my account with my username and password, so that I can access my personalized schedule, tasks, and campus information.
+
+ 
+	0.3	View Account Details
+	
+	As a student, I want to see my username and account details in an “Account” tab, so that I can verify I am logged in and feel a sense of ownership over my data.
+
+ 
+	0.4	Log Out of Account
+	
+	As a student, I want to log out of my account from the “Account” tab, so that my personal information is protected when I am no longer using the application.
 
 
 	1	Activities/Task Manager	
