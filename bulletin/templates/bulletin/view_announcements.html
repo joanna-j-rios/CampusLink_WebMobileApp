@@ -1,0 +1,27 @@
+<!-- view_announcements.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Announcements</title>  <!-- Title of the webpage -->
+</head>
+<body>
+    <h1>Announcements</h1>  <!-- Title on the webpage -->
+
+    <!-- Loop through each announcement passed from the view -->
+    <ul>
+        {% for announcement in announcements %}
+            <li>
+                <!-- Show the title of each announcement -->
+                <h2>{{ announcement.title }}</h2>
+
+                <!-- Show the content of each announcement -->
+                <p>{{ announcement.content }}</p>
+
+                <!-- Show when the announcement was created -->
+                <small>Posted on {{ announcement.created_at }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
