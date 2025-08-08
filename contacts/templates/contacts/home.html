@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emergency Contacts</title>
+</head>
+<body>
+    <h1>Emergency Contacts</h1>
+    <hr>
+    {% for contact in contacts %}
+        <h2>{{ contact.name }}</h2>
+        <p>Phone: {{ contact.phone_number }}</p>
+        <p>Service: {{ contact.service }}</p>
+        <hr>
+    {% empty %}
+        <p>No emergency contacts available.</p>
+    {% endfor %}
+</body>
+</html>

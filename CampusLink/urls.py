@@ -21,5 +21,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('bulletin/', include('bulletin.urls')),  # Make sure this line is there
+    path('bulletin/', include('bulletin.urls')),  
+    path('contacts/', include('contacts.urls')),  # <-- link contacts app here
 ]
