@@ -4,6 +4,6 @@ from . import views  # Import the views we just created
 
 # Define the URL patterns
 urlpatterns = [
-    path('view/', views.view_announcements, name='view_announcements'),  # Map the '/view/' URL to the view_announcements function
-    path('post/', views.post_announcement, name='post_announcement'),  # This URL handles posting announcements
+    path('post/', views.post_announcement, name='post_announcement'),  # Map the '/view/' URL to the view_announcements function
+    path('view/', views.view_announcements, name='view_announcements'),  # This URL handles posting announcements
 ]
