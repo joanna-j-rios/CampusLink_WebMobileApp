@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('bulletin/', include('bulletin.urls')),  
     path('contacts/', include('contacts.urls')),  # <-- link contacts app here
+    path('login/', include('login.urls')),  # <-- includes login URLs
 ]
