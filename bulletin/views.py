@@ -1,6 +1,7 @@
 # views.py
-from django.shortcuts import render  # Import the 'render' function to show a webpage
+from django.shortcuts import render, redirect  # Import the 'render' function to show a webpage
 from .models import Announcement  # Import the Announcement model to access announcements in the database
+from .forms import AnnouncementForm
 
 # Create a view for showing the announcements
 def view_announcements(request):
