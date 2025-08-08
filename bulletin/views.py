@@ -22,3 +22,22 @@ def post_announcement(request):
         form = AnnouncementForm()  # Show an empty form for GET requests
 
     return render(request, 'bulletin/post_announcement.html', {'form': form})  # Show the form on the webpage
+
+# View to display and filter announcements
+def search_announcements(request):
+    # Get query parameters for search
+    search_query = request.GET.get('q', '')  # The keyword search query
+    category_filter = request.GET.get('category', '')  # Category filter
+
+    # Filter announcements based on search query or category filter
+    announcements = Announcement.objects.all()
+
+    if search_query:
+        announcements = announcements.filter(title__icontains=search_query)  # Search by title
+        # You can also filter by content like this:
+        # announcements = announcements.filter(content__icontains=search_query)
+
+    if category_filter:
+        announcements = announcements.filter(category__icontains=category_filter)  # Filter by category
+
+    return render(request, 'bulletin/search_announcements.html', {'announcements': announcements, 'search_query': search_query, 'category_filter': category_filter})
