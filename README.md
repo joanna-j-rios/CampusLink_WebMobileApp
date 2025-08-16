@@ -32,6 +32,9 @@ To get a local copy of this project up and running on your machine, follow these
 Prerequisites 
 
 	Python 3.x installed on your system
+	
+	Django
+	
 	git command line tool
 
 Installation 
@@ -48,11 +51,17 @@ Installation
  	Create and activate a virtual environment to manage project dependencies
   
 		python -m venv virt
-		Source virt/bin/activate
-  
+		source virt/bin/activate
+  	
+	Install Django
+		
+		pip install django
+	
 	Run the application
  
-		python main.py
+		python manage.py runserver
+
+	Copy server address to browser to see app
 
 
 Agile Planning
