@@ -27,5 +27,9 @@ urlpatterns = [
     
     # The 'include' function references the urls.py file from the activities app.
     # All URLs that start with 'activities/' will be handled by the activities app.
-    path('activities/', include('activities.urls')),    
+    path('activities/', include('activities.urls')),
+    # Include the URLs from the bulletin app.
+    path('bulletin/', include('bulletin.urls')),  
+    # Include the urls from the emergency_contacts app
+    path('emergency-contacts/', include('emergency_contacts.urls')),  
 ]

@@ -3,7 +3,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="text-3xl font-bold mb-6">My Tasks</h1>
+    <h1 class="text-3xl font-bold mb-6">My To-Do & Planner</h1>
     
     <div class="space-y-4">
         {% for task in tasks %}
@@ -22,7 +22,7 @@
             </div>
         </div>
         {% empty %}
-        <p class="text-gray-500">You don't have any tasks yet!</p>
+        <p class="text-gray-500">You don't have any tasks/events yet!</p>
         {% endfor %}
     </div>
 {% endblock content %}
