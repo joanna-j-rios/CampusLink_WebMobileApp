@@ -1,3 +1,5 @@
+import os
+
 """
 Django settings for campus_link_web project.
 
@@ -37,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'activities' # added activities to apps list
+    'activities', # added activities to apps list
+    'bulletin', # added bulletin to apps list
+    'emergency_contacts', # added emergency_contacts to app list
 ]
 
 MIDDLEWARE = [
@@ -55,7 +59,7 @@ ROOT_URLCONF = 'campus_link_web.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
