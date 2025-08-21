@@ -15,26 +15,30 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
         
-    # Initialize form here so it's always defined for both POST and GET requests.
-    # If it's a POST, it will be re-assigned with request.POST data.
-    form = CustomLoginForm() 
-
+    # Handle the form submission when the user clicks 'Login'.
     if request.method == 'POST':
         form = CustomLoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
-                login(request, user)
-                # Removed: messages.success(request, f"Welcome back, {username}!")
-                return redirect('home')
+            # Check if the user exists first.
+            # if they dont exit
+            if not User.objects.filter(username=username).exists():
+                form.add_error(None, "User does not exist. Do you want to create an account?")
+            # if they do...
             else:
-                messages.error(request, "Invalid username or password.") # Keep this for error messages
-        # No 'else' needed here, as the form variable is already defined and passed below.
-    # No 'else' block for the form initialization here, as it's done at the beginning.
+                user = authenticate(request, username=username, password=password)
+                # if they entered right password --> we found matching hash for user
+                if user is not None:
+                    login(request, user)
+                    return redirect('home')
+                # if they did not enter right password
+                else:
+                    form.add_error(None, "Incorrect password. Please try again.")
+    else:
+        form = CustomLoginForm()
+
 
     return render(request, 'activities/login.html', {'form': form})
 
