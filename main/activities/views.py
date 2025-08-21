@@ -1,99 +1,111 @@
-# views.py
+# activities/views.py
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import CustomLoginForm, CustomRegistrationForm
+from django.contrib import messages # Keep this import for other messages
+
+from .forms import CustomLoginForm, CustomRegistrationForm, TaskForm
 from .models import Task
 
-# Create your views here.
+# --- Authentication Views ---
 
-
-
-# This view handles both displaying the login form and processing login submissions.
 def login_view(request):
-    # If the user is already logged in, redirect them to the tasks page.
     if request.user.is_authenticated:
-        return redirect('tasks')
+        return redirect('home')
         
-    # Handle the form submission when the user clicks 'Login'.
+    # Initialize form here so it's always defined for both POST and GET requests.
+    # If it's a POST, it will be re-assigned with request.POST data.
+    form = CustomLoginForm() 
+
     if request.method == 'POST':
         form = CustomLoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            # Check if the user exists first.
-            if not User.objects.filter(username=username).exists():
-                form.add_error(None, "User does not exist. Do you want to create an account?")
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                # Removed: messages.success(request, f"Welcome back, {username}!")
+                return redirect('home')
             else:
-                user = authenticate(request, username=username, password=password)
-                if user is not None:
-                    login(request, user)
-                    return redirect('tasks')
-                else:
-                    form.add_error(None, "Incorrect password. Please try again.")
-    else:
-        form = CustomLoginForm()
+                messages.error(request, "Invalid username or password.") # Keep this for error messages
+        # No 'else' needed here, as the form variable is already defined and passed below.
+    # No 'else' block for the form initialization here, as it's done at the beginning.
 
     return render(request, 'activities/login.html', {'form': form})
 
-
-
-
-# This view handles both displaying the registration form and creating a new user.
 def register_view(request):
-    # If the user is already logged in, redirect them to the tasks page.
     if request.user.is_authenticated:
-        return redirect('tasks')
-        
-    # Handle the form submission when the user clicks 'Register'.
+        return redirect('home')
+            
     if request.method == 'POST':
         form = CustomRegistrationForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             
-            # Create the new user with a password.
             User.objects.create_user(username=username, password=password)
-            
-            # Log the new user in and redirect them.
-            user = authenticate(request, username=username, password=password)
-            login(request, user)
-            return redirect('tasks')
+            messages.success(request, "Registration successful! You can now log in.") # Keep this message
+            return redirect('login')
     else:
         form = CustomRegistrationForm()
         
     return render(request, 'activities/register.html', {'form': form})
 
-
-
-
-# This view logs the user out.
 def logout_view(request):
     logout(request)
+    # Removed: messages.info(request, "You have been logged out.")
     return redirect('login')
 
+# --- New Home Screen View ---
+@login_required
+def home_view(request):
+    return render(request, 'activities/home.html', {'username': request.user.username})
 
-
-
-
-# This view to displays the tasks for the current user
-
-# note: @login_required is built in Django decorator that ensures only a logged-in
-# user can access this page. If a user tries to access it without it being logged-in
-# they will be redirected to the login page
+# --- To-Do & Planner Views ---
 
 @login_required
 def tasks_view(request):
-    # Retrieve all tasks for the currently logged-in user
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
+            messages.success(request, "Task added successfully!") # Keep this message
+            return redirect('tasks')
+    else:
+        form = TaskForm()
+    
     tasks = Task.objects.filter(user=request.user).order_by('is_completed', 'due_date')
     
-    # Context is a dictionary that holds the data to be passed to the template
     context = {
-        'tasks': tasks,
+        'form': form,
+        'tasks': tasks
     }
-    
-    # Render the HTML template and pass the tasks data to it
     return render(request, 'activities/tasks.html', context)
+
+@login_required
+def delete_task(request, pk):
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+    if request.method == 'POST':
+        task.delete()
+        messages.success(request, "Task deleted successfully!") # Keep this message
+    return redirect('tasks')
+
+@login_required
+def toggle_task_complete(request, pk):
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+    if request.method == 'POST':
+        task.is_completed = not task.is_completed
+        task.save()
+        # You can choose to keep or remove these specific messages for toggling task status
+        if task.is_completed:
+            messages.success(request, f"Task '{task.task_name}' marked as complete!") 
+        else:
+            messages.info(request, f"Task '{task.task_name}' marked as incomplete.")
+    return redirect('tasks')

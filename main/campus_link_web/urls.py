@@ -17,19 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import RedirectView
+from activities import views as activities_views
 
 
 urlpatterns = [
-    # This path handles the root URL (e.g., http://127.0.0.1:8000/)
-    # It redirects all requests to the 'login' URL, which we defined in activities/urls.py
-    path('', RedirectView.as_view(pattern_name='login', permanent=False), name='home'),
     path('admin/', admin.site.urls),
     
-    # The 'include' function references the urls.py file from the activities app.
-    # All URLs that start with 'activities/' will be handled by the activities app.
+    # Include the URLs from the activities app. This covers login, register, logout, tasks, delete, toggle, AND home_view.
     path('activities/', include('activities.urls')),
+    
     # Include the URLs from the bulletin app.
     path('bulletin/', include('bulletin.urls')),  
-    # Include the urls from the emergency_contacts app
+    
+    # Include the urls from the emergency_contacts app (assuming it exists).
+    # If emergency_contacts app does not exist, you can remove this line.
     path('emergency-contacts/', include('emergency_contacts.urls')),  
+    
+    # CRITICAL FIX: Set the root URL (e.g., http://127.0.0.1:8000/) to directly use the home_view from activities.
+    # The home_view itself already has @login_required, which will redirect unauthenticated users to login.
+    path('', activities_views.home_view, name='home_root'),
 ]

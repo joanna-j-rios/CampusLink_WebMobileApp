@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-
-
-
 # Our model for a user's task
 # It maps to a table named 'core_task' in the database
 class Task(models.Model):
