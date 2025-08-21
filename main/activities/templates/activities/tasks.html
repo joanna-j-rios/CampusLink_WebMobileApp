@@ -1,28 +1,119 @@
 <!-- tasks.html -->
 
 {% extends "base.html" %}
+{% load static %} 
+
+{% block title %}Tasks/Events{% endblock %} {# Page title changed #}
 
 {% block content %}
-    <h1 class="text-3xl font-bold mb-6">My To-Do & Planner</h1>
+<div class="container my-4">
+    {# Section for the "Tasks/Events" title with a light background and black text #}
+    <div class="bg-light text-dark p-3 mb-5 rounded-3 shadow-lg">
+        <h1 class="display-4 text-center mb-0">Tasks/Events</h1> {# Main page heading changed #}
+    </div>
     
-    <div class="space-y-4">
-        {% for task in tasks %}
-        <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
-            <div>
-                <h2 class="text-xl font-semibold">{{ task.task_name }}</h2>
-                <p class="text-gray-600">{{ task.description }}</p>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-500">Due: {{ task.due_date|default:"N/A" }}</span>
-                {% if task.is_completed %}
-                    <span class="text-green-500 font-bold">Done</span>
-                {% else %}
-                    <span class="text-red-500 font-bold">Pending</span>
-                {% endif %}
+    {# Django messages framework for user feedback #}
+    {% if messages %}
+        <div class="my-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# New: Display the empty tasks message as a prominent black bar with white text if no tasks exist #}
+    {% if not tasks %}
+        <div class="card p-4 text-center bg-dark text-white mb-4 shadow-lg">
+            <p class="mb-0">You don't have any tasks/events yet. Click "Add a New Task" to get started!</p> {# Message changed #}
+        </div>
+        {# Moved: Button to open the Add Task Modal, now below the empty task message #}
+        <div class="text-center mb-5">
+            <button type="button" class="btn btn-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                Add a New Task
+            </button>
+        </div>
+    {% endif %}
+
+    {# Bootstrap Modal for the Add Task Form #}
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title" id="addTaskModalLabel">Add New Task Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'tasks' %}"> 
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="{{ form.task_name.id_for_label }}" class="form-label">Task Name</label>
+                            {{ form.task_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.due_date.id_for_label }}" class="form-label">Due Date</label>
+                            {{ form.due_date }}
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </div>
+                </form>
             </div>
         </div>
-        {% empty %}
-        <p class="text-gray-500">You don't have any tasks/events yet!</p>
-        {% endfor %}
     </div>
+
+    {# List of Tasks - only displayed if tasks exist #}
+    {% if tasks %}
+        <h2 class="h3 mb-4 text-center text-secondary">Your Current Tasks/Events</h2> {# Heading for current tasks changed #}
+        <div class="row row-cols-1 g-4"> 
+            {% for task in tasks %}
+            <div class="col">
+                <div class="card shadow-lg {% if task.is_completed %}border-success{% else %}border-warning{% endif %}">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            {# Checkbox for completion #}
+                            <div class="form-check me-3">
+                                <form method="post" action="{% url 'toggle_task_complete' task.pk %}">
+                                    {% csrf_token %}
+                                    <input type="checkbox" class="form-check-input" {% if task.is_completed %}checked{% endif %} onchange="this.form.submit()">
+                                </form>
+                            </div>
+                            
+                            {# Task details #}
+                            <div class="flex-grow-1">
+                                <h5 class="card-title {% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">{{ task.task_name }}</h5>
+                                <p class="card-text text-light-emphasis">{{ task.description|default:"No description." }}</p>
+                                <p class="card-text"><small class="text-info">Due: {{ task.due_date|default:"N/A" }}</small></p>
+                            </div>
+
+                            {# Action buttons (Status and Delete) #}
+                            <div class="ms-3 d-flex flex-column align-items-end">
+                                {% if task.is_completed %}
+                                    <span class="btn btn-dark text-white btn-sm mb-2">Completed</span>
+                                {% else %}
+                                    <span class="btn btn-dark text-white btn-sm mb-2">Pending</span>
+                                {% endif %}
+                                
+                                {# Delete button #}
+                                <form method="post" action="{% url 'delete_task' task.pk %}" class="d-inline-block">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark text-white btn-sm" onclick="return confirm('Are you sure you want to delete this task?');">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %} {# End of if tasks #}
+</div>
 {% endblock content %}

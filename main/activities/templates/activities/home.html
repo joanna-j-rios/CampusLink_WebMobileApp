@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Welcome!{% endblock %}
+
+{% block content %}
+<div class="container my-5 text-center">
+    <div class="bg-light text-dark p-5 rounded-3 shadow-lg">
+        {# This line displays the welcome message with the username #}
+        <h1 class="display-3 mb-0">Welcome back, {{ user.username }}!</h1> 
+    </div>
+</div>
+{% endblock %}
