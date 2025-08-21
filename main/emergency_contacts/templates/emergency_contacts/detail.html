@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ contact.name }}</h2>
+    <p><strong>Phone:</strong> {{ contact.phone }}</p>
+    {% if contact.description %}
+    <p><strong>Description:</strong> {{ contact.description }}</p>
+    {% endif %}
+    <a href="{% url 'emergency_contacts:home' %}" class="btn btn-secondary mt-3">Back to Contacts</a>
+</div>
+{% endblock %}

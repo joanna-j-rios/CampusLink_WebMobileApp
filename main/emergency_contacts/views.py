@@ -1,11 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-
-# Create your views here.
+from .models import EmergencyContact
 
 @login_required
-def emergency_contacts_view(request):
-    """
-    Renders the emergency contacts page.
-    """
-    return render(request, 'emergency_contacts/emergency_contacts.html')
+def home(request):
+    contacts = EmergencyContact.objects.all()
+    return render(request, 'emergency_contacts/home.html', {'contacts': contacts})
+
+@login_required
+def contact_detail(request, pk):
+    contact = get_object_or_404(EmergencyContact, pk=pk)
+    return render(request, 'emergency_contacts/detail.html', {'contact': contact})
