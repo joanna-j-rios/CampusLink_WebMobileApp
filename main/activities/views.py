@@ -11,7 +11,9 @@ from .models import Task
 
 # --- Authentication Views ---
 
+# This view handles both displaying the login form and processing login submissions
 def login_view(request):
+    # if the user is already logged in, redirect them to the home page
     if request.user.is_authenticated:
         return redirect('home')
         
@@ -23,7 +25,7 @@ def login_view(request):
             password = form.cleaned_data['password']
 
             # Check if the user exists first.
-            # if they dont exit
+            # if they dont prompt them to create an account
             if not User.objects.filter(username=username).exists():
                 form.add_error(None, "User does not exist. Do you want to create an account?")
             # if they do...
@@ -42,7 +44,9 @@ def login_view(request):
 
     return render(request, 'activities/login.html', {'form': form})
 
+# This view handles both displaying the registration form and creating a new user
 def register_view(request):
+    # if the user is already logged in, redirect them to the home page
     if request.user.is_authenticated:
         return redirect('home')
             
@@ -51,9 +55,9 @@ def register_view(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            
+            # create the new user with a password
             User.objects.create_user(username=username, password=password)
-            messages.success(request, "Registration successful! You can now log in.") # Keep this message
+            #messages.success(request, "Registration successful! You can now log in.") --> removing since we dont have messages setup in login/register html
             return redirect('login')
     else:
         form = CustomRegistrationForm()
