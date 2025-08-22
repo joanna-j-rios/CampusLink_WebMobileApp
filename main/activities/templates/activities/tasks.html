@@ -24,18 +24,26 @@
         </div>
     {% endif %}
 
-    {# New: Display the empty tasks message as a prominent black bar with white text if no tasks exist #}
+    {# Display the empty tasks message as a prominent black bar with white text if no tasks exist #}
     {% if not tasks %}
         <div class="card p-4 text-center bg-dark text-white mb-4 shadow-lg">
-            <p class="mb-0">You don't have any tasks/events yet. Click "Add a New Task" to get started!</p> {# Message changed #}
+            <p class="mb-0">You don't have any tasks/events yet. Click "Add a Task" to get started!</p> {# Message changed #}
         </div>
-        {# Moved: Button to open the Add Task Modal, now below the empty task message #}
+        <!--
+        {# Button to open the Add Task Modal}
         <div class="text-center mb-5">
             <button type="button" class="btn btn-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#addTaskModal">
                 Add a New Task
             </button>
         </div>
+        -->
     {% endif %}
+
+    <div class="text-center mb-5">
+        <button type="button" class="btn btn-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+            Add a Task
+        </button>
+    </div>
 
     {# Bootstrap Modal for the Add Task Form #}
     <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
@@ -115,5 +123,8 @@
             {% endfor %}
         </div>
     {% endif %} {# End of if tasks #}
+
+    
+
 </div>
 {% endblock content %}
