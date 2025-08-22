@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages # Keep this import for other messages
-
+from django.http import JsonResponse
 from .forms import CustomLoginForm, CustomRegistrationForm, TaskForm
 from .models import Task
 
@@ -76,6 +76,7 @@ def home_view(request):
 
 # --- To-Do & Planner Views ---
 
+# --- To-Do & Planner Views ---
 @login_required
 def tasks_view(request):
     if request.method == 'POST':
@@ -84,8 +85,19 @@ def tasks_view(request):
             task = form.save(commit=False)
             task.user = request.user
             task.save()
-            messages.success(request, "Task added successfully!") # Keep this message
-            return redirect('tasks')
+            
+            # Check for the AJAX header to handle a non-page-reloading request
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                # Return JSON with the new task data for the JavaScript to handle
+                return JsonResponse({
+                    'id': task.id,
+                    'task_name': task.task_name,
+                    'is_completed': task.is_completed,
+                })
+            else:
+                # If it's a regular POST request, show a message and redirect as before
+                messages.success(request, "Task added successfully!")
+                return redirect('tasks')
     else:
         form = TaskForm()
     
@@ -102,7 +114,7 @@ def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk, user=request.user)
     if request.method == 'POST':
         task.delete()
-        messages.success(request, "Task deleted successfully!") # Keep this message
+        messages.success(request, "Task deleted successfully!")
     return redirect('tasks')
 
 @login_required
@@ -111,7 +123,6 @@ def toggle_task_complete(request, pk):
     if request.method == 'POST':
         task.is_completed = not task.is_completed
         task.save()
-        # You can choose to keep or remove these specific messages for toggling task status
         if task.is_completed:
             messages.success(request, f"Task '{task.task_name}' marked as complete!") 
         else:
