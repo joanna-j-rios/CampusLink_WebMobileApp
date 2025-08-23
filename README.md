@@ -20,7 +20,7 @@ Key Features
 
 Development Methodology
 
-This project is being developed using an agile methodology with an emphasis on iterative development, continuous feedback, testing, and collaboration through version control.
+This project is being developed using an agile methodology with an emphasis on iterative development, continuous feedback, testing, and collaboration through version control. Using Django framework and sqlite3 for database (for users/tasks/posts) tables.
 
 
 Basic Usage Instructions
@@ -104,11 +104,9 @@ Sprint Schedule
 		Start Date: August 6
 		End Date: August 11
 		Activities: 
-			Core UI Setup: Setup basic structure for interactivity.
-			Responsive Layout: Setup layout that responds to mobile/web views.
-			Navigation: Setup the primary navigation structure to switch between sections.
-   			Log In/ Create Account: Get the login and account creation flow running.
-			Placeholder Sections: Create empty frames/sections/pages for each of the main features (Activities, Events, Bulletin Board, Emergency Contacts, Account Info. with logout).
+			UI/Navigation: Setup the Django project and primary navigation to switch between sections (one per main feature).
+   			Login/Register/Logout: Get the login/logout and account creation flow running.
+			Placeholder Sections: Create apps for each of the main features (Activities, Bulletin Board, Emergency Contacts).
 			Initial Wireframes: Finalize basic UI wireframes & prototypes for the overall app layout.
 
 	Sprint 3
